@@ -1,0 +1,231 @@
+
+#We want to find the colors at different redshifts and write it all to an ASCII file. Create the ASCII file first and then create the loops and at the end, instead of 'print', write it to the file. 
+
+#variable = open ('filename', 'w+ = write with override"
+outputascii = open('Homework1ascii' , 'w+')
+
+#varialbe.write('writes string use \n to end line')
+outputascii.write('Galaxy type | Redshift | u-g | g-r | r-i | i-z \n')
+
+#Computing the colors of the Elliptical galaxy
+#assign variable to redshift value
+
+redshift = [ 0. , 0.05, 0.10, 0.15, 0.20, 0.25, 0.30, 0.35, 0.40, 0.45, 0.50, 0.55, 0.60, 0.65, 0.70, 0.75, 0.80, 0.85, 0.90, 0.95, 1.00, 1.05, 1.10, 1.15, 1.20, 1.25, 1.30, 1.35, 1.40, 1.45, 1.50]
+
+#for each redshift value in the array do ________
+
+for x in redshift:
+
+#Use the code you used in part II to find the colors, except this time, note the first line, where we change the values of the wavelengths for each iteration in the loop. 
+
+	elliptical_x_red = np.array(elliptical_x, dtype = float)*(1 + x)
+	Sloang_yinter_el_red = np.interp(elliptical_x_red, Sloang_x, Sloang_y_norm)
+	Sloani_yinter_el_red = np.interp(elliptical_x_red, Sloani_x, Sloani_y_norm)
+	Sloanr_yinter_el_red = np.interp(elliptical_x_red, Sloanr_x, Sloanr_y_norm)
+	Sloanu_yinter_el_red = np.interp(elliptical_x_red, Sloanu_x, Sloanu_y_norm)
+	Sloanz_yinter_el_red = np.interp(elliptical_x_red, Sloanz_x, Sloanz_y_norm)
+
+	elliptical_flux_sloani_red = np.multiply(elliptical_y, Sloani_yinter_el_red)
+	elliptical_flux_sloang_red = np.multiply(elliptical_y, Sloang_yinter_el_red)
+	elliptical_flux_sloanr_red = np.multiply(elliptical_y, Sloanr_yinter_el_red)
+	elliptical_flux_sloanu_red = np.multiply(elliptical_y, Sloanu_yinter_el_red)
+	elliptical_flux_sloanz_red = np.multiply(elliptical_y, Sloanz_yinter_el_red)
+
+	elliptical_flux_g_red = np.trapz(elliptical_flux_sloang_red, elliptical_x_red)
+	elliptical_flux_i_red = np.trapz(elliptical_flux_sloani_red, elliptical_x_red)
+	elliptical_flux_r_red = np.trapz(elliptical_flux_sloanr_red, elliptical_x_red)
+	elliptical_flux_u_red = np.trapz(elliptical_flux_sloanu_red, elliptical_x_red)
+	elliptical_flux_z_red = np.trapz(elliptical_flux_sloanz_red, elliptical_x_red)
+
+	El_g_red = -2.5*np.log10(elliptical_flux_g_red)
+	El_i_red = -2.5*np.log10(elliptical_flux_i_red)
+	El_r_red = -2.5*np.log10(elliptical_flux_r_red)
+	El_u_red = -2.5*np.log10(elliptical_flux_u_red)
+	El_z_red = -2.5*np.log10(elliptical_flux_z_red)
+
+	elliptical_u_g_red = (El_u_red) - (El_g_red)
+	elliptical_g_r_red = (El_g_red) - (El_r_red)
+	elliptical_r_i_red = (El_r_red) - (El_i_red)
+	elliptical_i_z_red = (El_i_red) - (El_z_red)
+
+#Outputs each iteration as one line 
+	outputascii.write('Elliptical, {0:8.3}, {1:8.2f}, {2:8.2f}, {3:8.2f}, {4:8.2f} \n'.format(x, elliptical_u_g_red, elliptical_g_r_red, elliptical_r_i_red, elliptical_i_z_red)) 
+
+
+#Repeats the procedure for other SED's
+#Now, find the colors for the Irregular galaxy
+
+for x in redshift:
+	irregular_x_red = np.array(irregular_x, dtype = float)*(1 + x)
+	Sloang_yinter_ir_red = np.interp(irregular_x_red, Sloang_x, Sloang_y_norm)
+	Sloani_yinter_ir_red = np.interp(irregular_x_red, Sloani_x, Sloani_y_norm)
+	Sloanr_yinter_ir_red = np.interp(irregular_x_red, Sloanr_x, Sloanr_y_norm)
+	Sloanu_yinter_ir_red = np.interp(irregular_x_red, Sloanu_x, Sloanu_y_norm)
+	Sloanz_yinter_ir_red = np.interp(irregular_x_red, Sloanz_x, Sloanz_y_norm)
+
+	irregular_flux_sloani_red = np.multiply(irregular_y, Sloani_yinter_ir_red)
+	irregular_flux_sloang_red = np.multiply(irregular_y, Sloang_yinter_ir_red)
+	irregular_flux_sloanr_red = np.multiply(irregular_y, Sloanr_yinter_ir_red)
+	irregular_flux_sloanu_red = np.multiply(irregular_y, Sloanu_yinter_ir_red)
+	irregular_flux_sloanz_red = np.multiply(irregular_y, Sloanz_yinter_ir_red)
+
+	irregular_flux_g_red = np.trapz(irregular_flux_sloang_red, irregular_x_red)
+	irregular_flux_i_red = np.trapz(irregular_flux_sloani_red, irregular_x_red)
+	irregular_flux_r_red = np.trapz(irregular_flux_sloanr_red, irregular_x_red)
+	irregular_flux_u_red = np.trapz(irregular_flux_sloanu_red, irregular_x_red)
+	irregular_flux_z_red = np.trapz(irregular_flux_sloanz_red, irregular_x_red) 
+
+	ir_g_red = -2.5*np.log10(irregular_flux_g_red)
+	ir_i_red = -2.5*np.log10(irregular_flux_i_red)
+	ir_r_red = -2.5*np.log10(irregular_flux_r_red)
+	ir_u_red = -2.5*np.log10(irregular_flux_u_red)
+	ir_z_red = -2.5*np.log10(irregular_flux_z_red)
+
+	irregular_u_g_red = (ir_u_red) - (ir_g_red)
+	irregular_g_r_red = (ir_g_red) - (ir_r_red)
+	irregular_r_i_red = (ir_r_red) - (ir_i_red)
+	irregular_i_z_red = (ir_i_red) - (ir_z_red)
+
+	outputascii.write('Irregular, {0:8.3}, {1:8.2f}, {2:8.2f}, {3:8.2f}, {4:8.2f} \n'.format(x, irregular_u_g_red, irregular_g_r_red, irregular_r_i_red, irregular_i_z_red)) 
+
+#Now, find the colors for the Sbc galaxy
+
+for x in redshift:
+	Sbc_x_red = np.array(Sbc_x, dtype = float)*(1 + x)
+	Sloang_yinter_sbc_red = np.interp(Sbc_x_red, Sloang_x, Sloang_y_norm)
+	Sloani_yinter_sbc_red = np.interp(Sbc_x_red, Sloani_x, Sloani_y_norm)
+	Sloanr_yinter_sbc_red = np.interp(Sbc_x_red, Sloanr_x, Sloanr_y_norm)
+	Sloanu_yinter_sbc_red = np.interp(Sbc_x_red, Sloanu_x, Sloanu_y_norm)
+	Sloanz_yinter_sbc_red = np.interp(Sbc_x_red, Sloanz_x, Sloanz_y_norm)
+
+	sbc_flux_sloani_red = np.multiply(Sbc_y, Sloani_yinter_sbc_red)
+	sbc_flux_sloang_red = np.multiply(Sbc_y, Sloang_yinter_sbc_red)
+	sbc_flux_sloanr_red = np.multiply(Sbc_y, Sloanr_yinter_sbc_red)
+	sbc_flux_sloanu_red = np.multiply(Sbc_y, Sloanu_yinter_sbc_red)
+	sbc_flux_sloanz_red = np.multiply(Sbc_y, Sloanz_yinter_sbc_red)
+
+	sbc_flux_g_red = np.trapz(sbc_flux_sloang_red, Sbc_x_red)
+	sbc_flux_i_red = np.trapz(sbc_flux_sloani_red, Sbc_x_red)
+	sbc_flux_r_red = np.trapz(sbc_flux_sloanr_red, Sbc_x_red)
+	sbc_flux_u_red = np.trapz(sbc_flux_sloanu_red, Sbc_x_red)
+	sbc_flux_z_red = np.trapz(sbc_flux_sloanz_red, Sbc_x_red) 
+
+	sbc_g_red = -2.5*np.log10(sbc_flux_g_red)
+	sbc_i_red = -2.5*np.log10(sbc_flux_i_red)
+	sbc_r_red = -2.5*np.log10(sbc_flux_r_red)
+	sbc_u_red = -2.5*np.log10(sbc_flux_u_red)
+	sbc_z_red = -2.5*np.log10(sbc_flux_z_red)
+
+	sbc_u_g_red = (sbc_u_red) - (sbc_g_red)
+	sbc_g_r_red = (sbc_g_red) - (sbc_r_red)
+	sbc_r_i_red = (sbc_r_red) - (sbc_i_red)
+	sbc_i_z_red = (sbc_i_red) - (sbc_z_red)
+
+	outputascii.write('Sbc, {0:8.3}, {1:8.2f}, {2:8.2f}, {3:8.2f}, {4:8.2f} \n'.format(x, sbc_u_g_red, sbc_g_r_red, sbc_r_i_red, sbc_i_z_red)) 
+
+#Now, find the colors for the Sbc galaxy
+
+for x in redshift:
+	Scd_x_red = np.array(Scd_x, dtype = float)*(1 + x)
+	Sloang_yinter_scd_red = np.interp(Scd_x_red, Sloang_x, Sloang_y_norm)
+	Sloani_yinter_scd_red = np.interp(Scd_x_red, Sloani_x, Sloani_y_norm)
+	Sloanr_yinter_scd_red = np.interp(Scd_x_red, Sloanr_x, Sloanr_y_norm)
+	Sloanu_yinter_scd_red = np.interp(Scd_x_red, Sloanu_x, Sloanu_y_norm)
+	Sloanz_yinter_scd_red = np.interp(Scd_x_red, Sloanz_x, Sloanz_y_norm)
+
+	scd_flux_sloani_red = np.multiply(Scd_y, Sloani_yinter_scd_red)
+	scd_flux_sloang_red = np.multiply(Scd_y, Sloang_yinter_scd_red)
+	scd_flux_sloanr_red = np.multiply(Scd_y, Sloanr_yinter_scd_red)
+	scd_flux_sloanu_red = np.multiply(Scd_y, Sloanu_yinter_scd_red)
+	scd_flux_sloanz_red = np.multiply(Scd_y, Sloanz_yinter_scd_red)
+
+	scd_flux_g_red = np.trapz(scd_flux_sloang_red, Scd_x_red)
+	scd_flux_i_red = np.trapz(scd_flux_sloani_red, Scd_x_red)
+	scd_flux_r_red = np.trapz(scd_flux_sloanr_red, Scd_x_red)
+	scd_flux_u_red = np.trapz(scd_flux_sloanu_red, Scd_x_red)
+	scd_flux_z_red = np.trapz(scd_flux_sloanz_red, Scd_x_red) 
+
+	scd_g_red = -2.5*np.log10(scd_flux_g_red)
+	scd_i_red = -2.5*np.log10(scd_flux_i_red)
+	scd_r_red = -2.5*np.log10(scd_flux_r_red)
+	scd_u_red = -2.5*np.log10(scd_flux_u_red)
+	scd_z_red = -2.5*np.log10(scd_flux_z_red)
+
+	scd_u_g_red = (scd_u_red) - (scd_g_red)
+	scd_g_r_red = (scd_g_red) - (scd_r_red)
+	scd_r_i_red = (scd_r_red) - (scd_i_red)
+	scd_i_z_red = (scd_i_red) - (scd_z_red)
+
+	outputascii.write('Scd, {0:8.3}, {1:8.2f}, {2:8.2f}, {3:8.2f}, {4:8.2f} \n'.format(x, scd_u_g_red, scd_g_r_red, scd_r_i_red, scd_i_z_red))
+
+outputascii.close() 
+
+#Create a color - color diagram
+
+#opened the ascii in a spreadsheet program and then changed it to a csv file 
+
+#First read in the data from the csv file
+data = np.genfromtxt('Photometric_redshifts.csv', dtype = float, delimiter = ',')
+
+#Now, create arrays to use for the data, it's helpful to view the spreadsheet at the same time and remember that python index starts at 0. 
+redshifts = data[1:31, 1]
+elliptical_u_g_mag = data[1:31, 2]
+elliptical_g_r_mag = data[1:31, 3]
+elliptical_r_i_mag = data[1:31, 4]
+elliptical_i_z_mag = data[1:31, 5]
+
+irregular_u_g_mag = data[32:62, 2]
+irregular_g_r_mag = data[32:62, 3]
+irregular_r_i_mag = data[32:62, 4]
+irregular_i_z_mag = data[32:62, 5]
+
+Sbc_u_g_mag = data[63:93, 2]
+Sbc_g_r_mag = data[63:93, 3]
+Sbc_r_i_mag = data[63:93, 4]
+Sbc_i_z_mag = data[63:93, 5]
+
+Scd_u_g_mag = data[94:124, 2]
+Scd_g_r_mag = data[94:124, 3]
+Scd_r_i_mag = data[94:124, 4]
+Scd_i_z_mag = data[94:124, 5]
+
+#Start to plot
+
+#Plot for u-g vs g-r
+
+pyplot.title('Color vs Color Diagram for u-g vs g-r')
+pyplot.scatter(elliptical_u_g_mag, elliptical_g_r_mag, label = 'Elliptical Galaxy')
+pyplot.scatter(irregular_u_g_mag, irregular_g_r_mag, label = 'Irregular Galaxy')
+pyplot.scatter(Sbc_u_g_mag, Sbc_g_r_mag, label = 'Sbc Galaxy')
+pyplot.scatter(Scd_u_g_mag, Scd_g_r_mag, label = 'Scd Galaxy')
+pyplot.xlabel('Magnitude (u-g)') 
+pyplot.ylabel('Magnitude (g-r)')
+pyplot.legend()
+pyplot.grid()
+pyplot.show();pyplot.close()
+
+#Plot for g-r vs r-i
+
+pyplot.title('Color vs Color Diagram for g-r vs r-i')
+pyplot.scatter(elliptical_g_r_mag, elliptical_r_i_mag, label = 'Elliptical Galaxy')
+pyplot.scatter(irregular_g_r_mag, irregular_r_i_mag, label = 'Irregular Galaxy')
+pyplot.scatter(Sbc_g_r_mag, Sbc_r_i_mag, label = 'Sbc Galaxy')
+pyplot.scatter(Scd_g_r_mag, Scd_r_i_mag, label = 'Scd Galaxy')
+pyplot.xlabel('Magnitude (g-r)') 
+pyplot.ylabel('Magnitude (r-i)')
+pyplot.legend()
+pyplot.grid()
+pyplot.show();pyplot.close()
+
+#Plot for r-i vs i-z
+pyplot.scatter(elliptical_r_i_mag, elliptical_i_z_mag, label = 'Elliptical Galaxy')
+pyplot.scatter(irregular_r_i_mag, irregular_i_z_mag, label = 'Irregular Galaxy')
+pyplot.scatter(Sbc_r_i_mag, Sbc_i_z_mag, label = 'Sbc Galaxy')
+pyplot.scatter(Scd_r_i_mag, Scd_i_z_mag, label = 'Scd Galaxy')
+pyplot.xlabel('Magnitude (r-i)') 
+pyplot.ylabel('Magnitude (i-z)')
+pyplot.title('Colo r vs Color Diagram for r-i vs i-z')
+pyplot.legend()
+pyplot.grid()
+pyplot.show();pyplot.close()
+
